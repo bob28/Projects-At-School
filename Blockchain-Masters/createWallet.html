@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Blockchain Final Project</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #2F2f2f;
+            color: white
+        }
+    </style>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Baasha Corp</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item ">
+                    <a class="nav-link active" href="index.html">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="blockInformation.html">Find Block </a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="createWallet.html">Create Wallet</a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="getAllInventory.html">Get All Inventory</a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="getInventory.html">Get Inventory</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="addInventory.html">Add Inventory</a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="removeInventory.html">Remove Inventory</a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="deleteInventory.html">Delete Inventory</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- create the HTML -->
+    <div class="container">
+        <h1 style="margin-top:3%">Create Wallet</h1>
+        <p>Create a wallet with your information. Then you can add, remove, and delete inventory!</p>
+        <label style="margin-top:1%;" for="name">Name of Company</label>
+        <input type="text" class="form-control bg-dark text-white bg-dark text-white" id="name" aria-describedby="number" placeholder="Name" required
+            style="width: 50%;margin-bottom:2%;margin-top:1%;">
+        <label style="margin-top:1%;" for="address">Address</label>
+        <input type="text" class="form-control bg-dark text-white" id="address" aria-describedby="number" placeholder="Address" required
+            style="width: 50%;margin-bottom:2%;margin-top:1%;">
+
+        <div class="row">
+            <div class="col-md-5">
+                <label style="margin-top:1%;" for="item">Inventory Item Name</label>
+                <input type="text" class="form-control bg-dark text-white" id="item" aria-describedby="item" placeholder="Item"
+                    style="width: 100%;margin-bottom:2%;margin-top:1%;">
+            </div>
+            <div class="col-md-3">
+                <label style="margin-top:1%;" for="quantity">Quantity</label>
+                <input type="number" class="form-control bg-dark text-white" id="quantity" aria-describedby="quantity"
+                    placeholder="Quantity" style="width: 50%;margin-bottom:2%;margin-top:1%;">
+            </div>
+            <div class="col-md-1">
+                <button style="margin-top:50%;" onclick="addItem()" class="btn btn-primary">Add</button>
+            </div>
+        </div>
+        <ul id="list">
+
+        </ul>
+        <button type="submit" style="margin-top:1%;" onclick="callNumber()" class="btn btn-primary">Submit</button>
+        <br>
+        <br>
+        <div id="error" style="display: none;" class="alert alert-danger" role="alert">
+            Make sure you complete all fields. Please include at least 1 inventory item you want to add.
+        </div>
+        <br>
+        <br>
+        <!-- create the fields that will showcase the data after it is sent -->
+        <h4 id="Header"></h4>
+        <p id="publicKey"></p>
+        <p id="privateKey"></p>
+        <sm id="information"></sm>
+    </div>
+
+
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+
+    <script>
+        inventory = {}
+
+        function addItem() {
+            // This function is responsible for taking in the items and quanity and then appending it to the list and the
+            // dictionary that we can pass along to the POST function to the blockchain
+            if (document.querySelector('#item').value == "" || document.querySelector('#quantity').value == "") {
+                $("#error").show()
+                return
+            }
+            $("#error").hide()
+            var list = document.getElementById('list');
+            var listItem = document.createElement("li");
+            // add the item to the list and the dictionary
+            listItem.innerText = document.querySelector('#item').value + ", " + document.querySelector('#quantity')
+                .value;
+            list.appendChild(listItem);
+            inventory[document.querySelector('#item').value] = document.querySelector('#quantity').value;
+            return false; 
+        }
+
+        function callNumber() {
+            // the function when the submit button is clicked
+            console.log(inventory)
+            if (Object.keys(inventory).length === 0) {
+                $("#error").show()
+                return
+            }
+            // the paramerts dictionary that we will send to flask
+            params = {
+                name: document.querySelector('#name').value,
+                address: document.querySelector('#address').value,
+                inventory: inventory
+            }
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json',
+                url: 'http://127.0.0.1:8080/api/blockchain/wallet', // the url to create a new wallet
+                dataType: 'json',
+                data: JSON.stringify(params),
+                success: function (result) {
+                    // read the response and then display the public and private key to the screen
+                    document.getElementById('Header').innerHTML = "Wallet information:"
+                    document.getElementById('publicKey').innerHTML = "<b>Public Key:</b> " + result
+                        .publicKey
+                        .toString()
+                    document.getElementById('privateKey').innerHTML = "<b>Private Key:</b> " + result
+                        .privateKey
+                    document.getElementById('information').innerHTML = "Make sure to keep this safe!"
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+        }
+    </script>
+
+
+</body>
+
+</html>

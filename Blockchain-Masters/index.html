@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Blockchain Final Project </title>
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<style>
+    body{
+        background-color:#2F2f2f;
+        color:white
+    }
+</style>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Baasha Corp</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item ">
+                    <a class="nav-link active" href="index.html">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="blockInformation.html">Find Block </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="createWallet.html">Create Wallet</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="getAllInventory.html">Get All Inventory</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="getInventory.html">Get Inventory</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="addInventory.html">Add Inventory</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="removeInventory.html">Remove Inventory</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="deleteInventory.html">Delete Inventory</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="p-5 text-center bg-image" style="background-size:cover;
+          background-image: url('https://wallpaperaccess.com/full/1560128.jpg');
+          height: 400px;">
+            <div class="mask" style="">
+                <div class="d-flex justify-content-center align-items-center h-100">
+                    <div class="text-white">
+                        <h1 class="mb-3">Baasha Corp Inventory Management</h1>
+                        <h6 class="mb-3">Managing your inventory since 2022</h6>
+                        <a class="btn btn-outline-light btn-lg" href="createWallet.html" role="button">Create a Wallet</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <div class="container" style="text-align: center;">
+        
+
+        <br>
+        <br>
+        <!-- create the fields that will showcase the data after it is sent -->
+        <h4 class="mb-3"id="Header">Blockchain Information: </h4>
+        <p id="length"></p>
+        <p id="validity"></p>
+        <p id="signatureValidity"></p>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+    <script>
+        $(document).ready(function () {
+            // when the website loads, call the get call to get the information about the blockchain
+            $.get(
+                "http://127.0.0.1:8080/api/blockchain", // the url
+                function (data) {
+                    // parase the data and showcase it to the user
+                    document.getElementById('length').innerHTML = "<b>Blockchain length: </b><br>" + data
+                        .length
+                    document.getElementById('validity').innerHTML = "<b>Hash Validity:</b><br>" + data
+                        .validity
+                    document.getElementById('signatureValidity').innerHTML =
+                        "<b>Signature Validity:</b><br>" + data
+                        .signature_validity
+
+                }
+            );
+        });
+    </script>
+
+</body>
+
+
+</html>

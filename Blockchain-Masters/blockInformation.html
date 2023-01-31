@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Blockchain Final Project</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+<style>
+    body {
+        background-color: #2F2f2f;
+        color: white
+    }
+</style>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Baasha Corp</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item ">
+                    <a class="nav-link" href="index.html">Home </a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="blockInformation.html">Find Block <span
+                            class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="createWallet.html">Create Wallet</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="getAllInventory.html">Get All Inventory</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="getInventory.html">Get Inventory</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="addInventory.html">Add Inventory</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="removeInventory.html">Remove Inventory</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="deleteInventory.html">Delete Inventory</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <h1 style="margin-top:3%">Get Block Information</h1>
+        <p>Put a block number to see the information about that block</p>
+        <label style="margin-top:1%;" for="number">Number</label>
+        <input type="number" class="form-control bg-dark text-white" id="number" aria-describedby="number" placeholder="Number"
+            style="width: 50%;margin-bottom:2%;margin-top:1%;">
+        <button type="submit" onclick="callNumber()" class="btn btn-primary">Submit</button>
+        <br>
+        <br>
+        <!-- create the fields that will showcase the data after it is sent -->
+        <h4 id="Header"></h4>
+        <p id="blocknumber"></p>
+        <p id="time"></p>
+        <p id="hash"></p>
+        <p id="nonce"></p>
+        <p id="publicKey"></p>
+        <p id="signature"></p>
+        <p id="transaction"></p>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+    <script>
+        function callNumber() {
+            number = document.querySelector('#number').value
+            $.get(
+                "http://127.0.0.1:8080/api/blockchain/block/" + number, // the url plus the number of block that the user wants to see
+                function (data) {
+                    if (data == null) {
+                        // reset all of the paragraphs for the next block
+                        document.getElementById('Header').innerHTML = "Block Not Found"
+                        document.getElementById('time').innerHTML = ""
+                        document.getElementById('hash').innerHTML = ""
+                        document.getElementById('nonce').innerHTML = ""
+                        document.getElementById('publicKey').innerHTML = ""
+                        document.getElementById('signature').innerHTML = ""
+                        document.getElementById('transaction').innerHTML = ""
+                    } else {
+                        // read the response and then add it to the webpage.
+                        document.getElementById('Header').innerHTML = "Block information"
+                        document.getElementById('time').innerHTML = "<b>Time:</b><br>" + (data.header.time)
+                            .toString()
+                        document.getElementById('hash').innerHTML = "<b>Hash:</b><br>" + data.hash
+                        document.getElementById('nonce').innerHTML = "<b>Nonce:</b><br>" + data.header.nonce
+                        document.getElementById('publicKey').innerHTML = "<b>Public Key:</b><br> " + data.public_key
+                        document.getElementById('signature').innerHTML = "<b>Signature:</b><br> " + data.signature
+                        document.getElementById('transaction').innerHTML = "<b>Transaction hash:</b><br> " + data
+                            .transaction
+                    }
+                }
+            );
+        }
+    </script>
+
+</body>
+
+
+</html>

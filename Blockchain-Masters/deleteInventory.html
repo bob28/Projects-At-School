@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Blockchain Final Project</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<style>
+    body {
+        background-color: #2F2f2f;
+        color: white
+    }
+</style>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Baasha Corp</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item ">
+                    <a class="nav-link active" href="index.html">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="blockInformation.html">Find Block </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="createWallet.html">Create Wallet</a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="getAllInventory.html">Get All Inventory</a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="getInventory.html">Get Inventory</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="addInventory.html">Add Inventory</a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="removeInventory.html">Remove Inventory</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="deleteInventory.html">Delete Inventory</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h1 style="margin-top:3%">Delete Inventory</h1>
+        <p>Put your public and private key and the item you want to delete out of the database.</p>
+        <label style="margin-top:1%;" for="publicKey">Public Key</label>
+        <input type="text" class="form-control bg-dark text-white" id="publicKey" aria-describedby="publicKey" placeholder="Public Key"
+            required style="width: 100%;margin-bottom:2%;margin-top:1%;">
+        <label style="margin-top:1%;" for="privateKey">Private Key</label>
+        <input type="password" class="form-control bg-dark text-white" id="privateKey" aria-describedby="Private Key"
+            placeholder="Private Key" required style="width: 100%;margin-bottom:2%;margin-top:1%;">
+        <label style="margin-top:1%;" for="item">Item</label>
+        <input type="text" class="form-control bg-dark text-white" id="item" aria-describedby="Item" placeholder="Item" required
+            style="width: 100%;margin-bottom:2%;margin-top:1%;">
+
+        <button type="submit" style="margin-top:1%;" onclick="callNumber()" class="btn btn-primary">Submit</button>
+        <br>
+        <br>
+        <div id="error" style="display: none;" class="alert alert-danger" role="alert">
+            Make sure you complete all fields and public, private keys fields must be integers
+        </div>
+        <div id="error2" style="display: none;" class="alert alert-danger" role="alert">
+        </div>
+        <br>
+        <br>
+        <!-- create the fields that will showcase the data after it is sent -->
+        <h4 id="Header"></h4>
+        <div id="success" class="alert alert-success" role="alert" style="display: none;">
+
+        </div>
+        <p id="item2"></p>
+        <p id="blocknum"></p>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous">
+    </script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous">
+    </script>
+
+    <script>
+        function callNumber() {
+            // the function when the submit button is clicked
+            // make sure that all the fields are filled
+            if (document.querySelector('#publicKey').value == "" || document.querySelector('#privateKey').value == "" ||
+                document.querySelector('#item').value == "") {
+                $("#error").show()
+                return
+            }
+            // make sure that the fields are integers as inputs
+            if (!Number.isInteger(+document.querySelector('#publicKey').value) || !Number.isInteger(+document
+                    .querySelector('#privateKey').value)) {
+                $("#error").show();
+                return
+            }
+            // hide the errors
+            $("#error").hide()
+            $("#error2").hide()
+            $("#success").hide()
+            $("#item").text("")
+            $("#blocknum").text("")
+            // create the parameter dictionary that will be sent to flask
+            params = {
+                publicKey: document.querySelector('#publicKey').value,
+                privateKey: document.querySelector('#privateKey').value,
+                item: document.querySelector('#item').value
+            }
+            // the post call 
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json',
+                url: 'http://127.0.0.1:8080/api/blockchain/deleteInventory', // the url to delete inventory 
+                dataType: 'json',
+                data: JSON.stringify(params), // the aarameters 
+                success: function (result) {
+                    if (result.error != null) {
+                        //showcase the errors if there any
+                        $("#error2").text(result.error);
+                        $("#error2").show();
+                    } else {
+                        // parse the response and show it to the user
+                        document.getElementById('Header').innerHTML = "Hi: " + result.name + "!";
+                        $("#success").text(result.message);
+                        $("#success").show();
+                        $("#blocknum").text("Your block number is: " + result.number)
+
+                    }
+
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+        }
+    </script>
