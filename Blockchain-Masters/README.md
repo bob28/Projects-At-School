@@ -14,6 +14,8 @@ Python, [Flask](https://flask.palletsprojects.com/en/2.2.x/), Hashlib, RSA, HTML
 **Result:**
 With a simple Bootstrap web interface, the application worked to connect to the Flask API and perform the actions that you expect an inventory management system to do. These actions were created as smart contracts and ran on custom made blockchain. 
 
+There are 9 files in this directory. 8 of these are html files which allows the users to interact with the app. The main.py file contains the source code of the blockchain network and Flask routes. 
+
 **Run through:**
 
 1) The user first creates a wallet which housed information relating to the business, such as the name, addresses, and also the initial inventory that the user wants to start off with. This was taken as a list. 
@@ -24,5 +26,3 @@ With a simple Bootstrap web interface, the application worked to connect to the 
 6) Each block is also being signed with the user's private and public keys to ensure that the data is accurate. 
 7) The user also has the option to check the validity of the blockchain which makes sure that the each block is linked correctly and previous hash values relate to the previous block to ensure tha the chain has not been tampered with. 
 8) The user can also get information for a single block on the blockchain. Of course, the contents that were added to the block are hashed, but the user can ensure that the new information has been added successfully. 
-
-There are 9 files in this directory. 8 of these are html files which allows the users to interact with the app. The main.py file contains the source code of the blockchain network and Flask routes. 
